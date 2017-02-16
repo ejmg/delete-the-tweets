@@ -1,0 +1,5 @@
+handles.py
+__pycache__/
+*.txt
+*.txt.bak
+secrets.py
