@@ -25,7 +25,7 @@ class TwitterSearch(metaclass=ABCMeta):
     def search(self, query):
         self.perform_search(query)
 
-    def perform_search(self, query):
+    def perform_search(self, query, record, ids):
         """
         Scrape items from twitter
         :param query:   Query to search Twitter with. Takes form of queries constructed with using Twitters
@@ -45,8 +45,8 @@ class TwitterSearch(metaclass=ABCMeta):
             # If we haven't set our min tweet yet, set it now
             if min_tweet is None:
                 min_tweet = tweets[0]
-            record = open("scraper-from-spookintheshell.txt", "a")
-            continue_search = self.save_tweets(tweets, record)
+            
+            continue_search = self.save_tweets(tweets, record, ids)
 
             # Our max tweet is the last tweet in the list
             max_tweet = tweets[-1]
@@ -162,7 +162,7 @@ class TwitterSearch(metaclass=ABCMeta):
         return parse.urlunparse(url_tupple)
 
     @abstractmethod
-    def save_tweets(self, tweets, record):
+    def save_tweets(self, tweets, record, ids):
         """
         An abstract method that's called with a list of tweets.
         When implementing this class, you can do whatever you want with these tweets.
@@ -181,7 +181,7 @@ class TwitterSearchImpl(TwitterSearch):
         self.max_tweets = max_tweets
         self.counter = 0
 
-    def save_tweets(self, tweets, record):
+    def save_tweets(self, tweets, record, ids):
         """
         Just prints out tweets
         :return:
@@ -220,54 +220,60 @@ class TwitterSlicer(TwitterSearch):
     def search(self, query):
         n_days = (self.until - self.since).days
         # tp = ThreadPoolExecutor(max_workers=self.n_threads)
+        record = open("tweetID.txt", "a")
+        record.writelines("TWEET_IDS = ")
+        ids = []
         for i in range(0, n_days):
             since_query = self.since + datetime.timedelta(days=i)
             until_query = self.since + datetime.timedelta(days=(i + 1))
             day_query = "%s since:%s until:%s" % (query, since_query.strftime("%Y-%m-%d"),
                                                   until_query.strftime("%Y-%m-%d"))
-            self.perform_search(day_query)
+            self.perform_search(day_query, record, ids)
             # tp.submit(self.perform_search, day_query)
         # tp.shutdown(wait=True)
+        record.write(str(ids))
+        record.close()
 
-    def save_tweets(self, tweets, record):
+    def save_tweets(self, tweets, record, ids):
         """
         Just prints out tweets
         :return: True always
         """
         # record2 = open("test_scraper.txt", "a+")
         for tweet in tweets:
-            print(tweet['tweet_id'])
+            ids.append(tweet['tweet_id'])
+            # print(tweet['tweet_id'])
             # record2.write(tweet["text"] + "\n")
             
-            t = datetime.datetime.fromtimestamp((tweet['created_at']/1000))
-            fmt = "%Y-%m-%d %H:%M:%S"
-            record.write("%i [%s] - %s \n" % (self.counter, t.strftime(fmt), tweet['text']))
-            record.close()
-            Lets add a counter so we only collect a max number of tweets
+            # t = datetime.datetime.fromtimestamp((tweet['created_at']/1000))
+            # fmt = "%Y-%m-%d %H:%M:%S"
+            # record.write("%i [%s] - %s \n" % (self.counter, t.strftime(fmt), tweet['text']))
+            # record.close()
+            # Lets add a counter so we only collect a max number of tweets
             self.counter += 1
-            if tweet['created_at'] is not None:
-                t = datetime.datetime.fromtimestamp((tweet['created_at']/1000))
-                fmt = "%Y-%m-%d %H:%M:%S"
-                log.info("%i [%s] - %s" % (self.counter, t.strftime(fmt), tweet['text']))
-        record2.close()
-        for tweet in tweets:
+            # if tweet['created_at'] is not None:
+                # t = datetime.datetime.fromtimestamp((tweet['created_at']/1000))
+                # fmt = "%Y-%m-%d %H:%M:%S"
+                # log.info("%i [%s] - %s" % (self.counter, t.strftime(fmt), tweet['text']))
+        # record2.close()
+        # for tweet in tweets:
             
-            record.close()
-            Lets add a counter so we only collect a max number of tweets
-            self.counter += 1
-            if tweet['created_at'] is not None:
-                t = datetime.datetime.fromtimestamp((tweet['created_at']/1000))
-                fmt = "%Y-%m-%d %H:%M:%S"
-                record.write("%i [%s] - %s \n" % (self.counter, t.strftime(fmt), tweet['text']))
-                log.info("%i [%s] - %s" % (self.counter, t.strftime(fmt), tweet['text']))
-        record.close()
+        #     record.close()
+        #     Lets add a counter so we only collect a max number of tweets
+        #     self.counter += 1
+        #     if tweet['created_at'] is not None:
+        #         t = datetime.datetime.fromtimestamp((tweet['created_at']/1000))
+        #         fmt = "%Y-%m-%d %H:%M:%S"
+        #         record.write("%i [%s] - %s \n" % (self.counter, t.strftime(fmt), tweet['text']))
+        #         log.info("%i [%s] - %s" % (self.counter, t.strftime(fmt), tweet['text']))
+        
         return True
 
 
 if __name__ == '__main__':
     log.basicConfig(level=log.INFO)
 
-    search_query = "from:"
+    search_query = "from:spookintheshell"
     rate_delay_seconds = 0
     error_delay_seconds = 5
 
@@ -276,7 +282,7 @@ if __name__ == '__main__':
     # twit.search(search_query)
 
     # Example of using TwitterSlice
-    select_tweets_since = datetime.datetime.strptime("2017-02-10", '%Y-%m-%d')
+    select_tweets_since = datetime.datetime.strptime("2012-02-10", '%Y-%m-%d')
     select_tweets_until = datetime.datetime.strptime("2017-02-14", '%Y-%m-%d')
     threads = 1
 
