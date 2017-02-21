@@ -61,11 +61,9 @@ def recordTweet(tweet, record):
                                  tweet.in_reply_to_screen_name))
 
 
-def delete_tweets(api, status, important):
+def delete_tweets(api, status, important, delete):
     if status.favorite_count >= 3:
         important = True
-        #elif hasattr(tweet, "extended_entities"):
-        #important = True
     else:
         token = TweetTokenizer()
         tweet_tokens = token.tokenize(status.text)
@@ -77,6 +75,7 @@ def delete_tweets(api, status, important):
         try:
             api.destroy_status(status.id)
             print("Tweet destroyed!")
+            delete += 1
             important = True
         except ty.RateLimitError as e:
             print(e)
@@ -94,12 +93,11 @@ if __name__ == "__main__":
     user = api.me()
     # timeline = mineHomeTimeline(api)
     # record = open("tweets2.txt", "a")
-    # print("Acquired {} total tweets! Writing to file.".format(len(timeline)))
     i = 1
-    for tweet in TWEET_IDS[870:]:
+    delete = 0
+    for tweet in TWEET_IDS:
         important = False
 
-        # print(tweet.extended_entities["media"][0]["media_url"])
         print("Tweet #{}".format(i))
         retrieved = False
         exists = True
@@ -124,11 +122,11 @@ if __name__ == "__main__":
         print(status.text)
         print(status.id)
 
-        delete_tweets(api, status, important)
+        delete_tweets(api, status, important, delete)
 
         i += 1
         important = False
     # record.close()
-
+    print("Went through {} tweets total".format(i))
+    print("Delete {} of total tweets".format())
     print("done!")
-    # tweets = [tweet.text for tweet in timeline]
