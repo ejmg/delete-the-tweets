@@ -1,5 +1,6 @@
 __pycache__/
 *.txt
+!requirements.txt
 *.txt.bak*
 secrets.py
 tweets/*/
