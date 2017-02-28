@@ -12,3 +12,4 @@ deleted, leave the values below unmodified.
 """
 KEY_WORDS = [""]
 LIKES = None
+MAX = None

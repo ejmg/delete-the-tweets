@@ -4,7 +4,7 @@ this script deletes tweets off of your timeline
 
 from secrets import ACCESS_SECRET, ACCESS_TOKEN, CONSUMER_KEY, CONSUMER_SECRET
 import tweepy as ty
-from tweets.options import USER_NAMES, LIKES
+from tweets.options import KEY_WORDS, LIKES
 import time
 import csv
 import sys
@@ -171,7 +171,7 @@ press ^C or ^D to abort the process at any time.
                 print("Tweet status: " + row[5])
                 csv_status = row[5]
                 status_id = row[0]
-                if len(USER_NAMES) > 0:
+                if len(KEY_WORDS) > 0:
                     important = check_keywords(csv_status, important)
                 if not important:
                     status, exists = retrieve_status(api, status_id)
