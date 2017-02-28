@@ -44,7 +44,7 @@ of tutorials already online. If you are on some kind of Unix or Linux (that does
 I personally recommend [[https://github.com/yyuu/pyenv][Pyenv by yyuu.]] Another option that I hear works great (for both Windows and n*x systems) and that
 requires next to 0% technical experience is [[https://docs.continuum.io/anaconda/install][Anaconda, a pre-packaged python management system.]]
 
-### Tweepy and NLTK
+*** Tweepy and NLTK
 
 Once you have Python3 (and PIP or Conda, see above), all you need to do is
 
