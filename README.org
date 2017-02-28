@@ -5,7 +5,7 @@ is how we live in an age where your information can and *will* be used against y
 an employer, employee, a fellow peer, an insurance company, your government, or some random anonymous
 asshole, it is only a matter of time.
 
-While it is Sisyphean task to eliminate your digital presence online, you can minimize it and make it harder at least
+While it is a Sisyphean task to eliminate your digital presence online, you can minimize it and make it harder at least
 for those who want to use your information without your permission or in ways you never intended. This script is an
 attempt in helping you in this endeavor.
 
