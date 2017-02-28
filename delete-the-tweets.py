@@ -4,7 +4,7 @@ this script deletes tweets off of your timeline
 
 from secrets import ACCESS_SECRET, ACCESS_TOKEN, CONSUMER_KEY, CONSUMER_SECRET
 import tweepy as ty
-from tweetIDS.handles import USER_NAMES
+from tweets.options import USER_NAMES, LIKES
 import time
 import csv
 import sys
@@ -23,6 +23,9 @@ def setTwitterAuth():
 
 
 def handleLimit(cursor):
+    """
+    old method, may use for maintenance script
+    """
     while True:
         try:
             yield cursor.next()
@@ -32,6 +35,9 @@ def handleLimit(cursor):
 
 
 def mineHomeTimeline(api):
+    """
+    old method, may use for maintenance script
+    """
 
     timeline = [status for status in
                 handleLimit(ty.Cursor(api.user_timeline).items())]
@@ -39,6 +45,10 @@ def mineHomeTimeline(api):
 
 
 def recordTweet(tweet, record):
+
+    """
+    old method, may use for maintenance script
+    """
     if hasattr(tweet, "retweeted_status"):
             record.write("id: {}, text: {}, favorites: {},"
                          " reply_tweet_ID: {}, quoted_status_id: {}, "
@@ -59,7 +69,11 @@ def recordTweet(tweet, record):
                                  tweet.in_reply_to_screen_name))
 
 
-def check_names(csv_status, important):
+def check_keywords(csv_status, important):
+    """
+    checks for presence of keywords in the tweet currently being process,
+    returns boolean important indicating whether it is to be deleted or not
+    """
     token = TweetTokenizer()
     tweet_tokens = token.tokenize(csv_status)
     for words in tweet_tokens:
@@ -70,6 +84,10 @@ def check_names(csv_status, important):
 
 
 def retrieve_status(api, status_id):
+    """
+    retrieves a status using the status_id
+    returns status objects and boolean existence to confirm existence
+    """
     retrieved = False
     exists = True
     while not retrieved:
@@ -92,12 +110,17 @@ def retrieve_status(api, status_id):
 
 
 def delete_tweets(api, status, important, delete):
+    """
+    deletion method, will attempt to delete status passed
+    returns delete counter which will increment upon successful deletion
+    """
     while not important:
         try:
             api.destroy_status(status.id)
             print("Tweet destroyed!")
             delete += 1
             important = True
+            return delete
         except ty.RateLimitError as e:
             print(e)
             print("Sleeping!")
@@ -149,17 +172,17 @@ press ^C or ^D to abort the process at any time.
                 csv_status = row[5]
                 status_id = row[0]
                 if len(USER_NAMES) > 0:
-                    important = check_names(csv_status, important)
+                    important = check_keywords(csv_status, important)
                 if not important:
                     status, exists = retrieve_status(api, status_id)
                     if not exists:
                         count += 1
                         continue
-                    if status.favorite_count >= 3:
+                    if LIKES is not None and status.favorite_count >= LIKES:
                         important = True
                     # probably should add clause to check specific tweet ids
                 if not important:
-                    delete_tweets(api, status, important, delete)
+                    delete = delete_tweets(api, status, important, delete)
             important = False
             count += 1
     print("Went through {} tweets total".format(count))
