@@ -1,5 +1,9 @@
-handles.py
 __pycache__/
 *.txt
-*.txt.bak
+*.txt.bak*
 secrets.py
+tweets/*/
+tweets/index.html
+tweets/tweets.csv
+tweetIDS/
+
