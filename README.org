@@ -1,4 +1,4 @@
-* Delete The Tweets
+* Delete The Tweets and Delete Maintenance
 
 Your information is valuable - this much is a given. What most people do not think about, however,
 is how we live in an age where your information can and *will* be used against you. Whether this is
@@ -11,9 +11,10 @@ attempt in helping you in this endeavor.
 
 ** Small Preface
 
-This script is targeted moreso at people with accounts who have excess of 3k tweets. I will shortly be releasing an additional
-script to go with this repository that helps maintain your account below 3k tweets. If you are above 3k tweets, you will have to use the main script
-first. If not, you can either use this script or wait till I release the simpler one.
+~delete-the-tweets.py~ is targeted moreso at people with accounts who have excess of 3k tweets. 
+~delete-maintenance.py~ is intended as a maintenance script for less than 3k tweets. This distinction is critical
+because of Twitter's API's limits on how far back on a timeline you can go purely through the API and without any
+kind of archive or manual crawling. Please use them as intended if you want effective results.
 
 ** What You Need
 
@@ -23,7 +24,7 @@ first. If not, you can either use this script or wait till I release the simpler
 3. NLTK module
 4. Your twitter API keys
 5. Your twitter archive
-6. Keywords and Likes Limit
+6. Keywords, Likes, and Max Limit
 
 ** How to Get What You Need
 
@@ -78,18 +79,19 @@ of this repository. *Do not make another folder for it, it must be extracted as 
 
 *** Keywords and Likes Limit
 
-A part of this script that others neglect is the ability to preserve tweets based on some kind of criteria. With this script, I define two simple
+A part of these scripts that others neglect is the ability to preserve tweets based on some kind of criteria. With this script, I define three simple
 variables in ~options.py~ within the ~tweets~ subdirectory that help you have some control over this process. First, I let you create an list ~KEY_WORDS~ of keywords/user names that, 
 if found in a tweet, will prevent the script from deleting it. Secondly, I have a simple constant ~LIKES~ that lets you preserve popular tweets of yours
-if you want that. The names of these variables cannot change unless you change their identifiers from within the script. Your variables should look like so:
+if you want that. Finally, ~MAX~ allows you to determine how far back the script goes (~delete-maintenance.py~ only). The names of these variables cannot change unless you change their identifiers from within the script. Your variables should look like so:
 
 #+BEGIN_SRC python
 KEY_WORDS = ["WORD", "USER_HANDLE_HERE", "BLAH"]
 LIKES = 5
+MAX = 300
 #+END_SRC
 
 If you don't care for any keywords, simply leave the list empty. If you don't want to save any tweets with x number of likes, leave the variable with its default value of
-None.
+None. Same goes for MAX.
 
 *** You are now ready to go.
 
@@ -100,3 +102,6 @@ If you have done all the above as described, you can now execute the main script
 You will be prompted to confirm your actions as this *is a permanent process and cannot be undone*. You should be good to go from here. Beware, an account with a
 large amount of tweets will take some time to delete as Twitter's API limits requests on a fixed basis per 15 minutes. As a result, you will see the script declare
 that it is ~sleeping!~ when this limit is hit. This will last 15 minutes and then continue unabated. This process will repeat as many times as necessary till done.
+
+The second script functions nearly identically except *no confirmation prompt will be given*. Additionally, the second script will save a log ~deleted-tweets.txt~ that will
+keep track of all tweets deleted by the script.
