@@ -1,15 +1,22 @@
 """
-Declare key words, phrases, handles that if found in a tweet will exclude it
-from deletion.
+Declare key words/phrases and number of likes that will exclude a tweet from
+being deleted by delete-the-tweets.py. Also define the max tweets searched
+by delete-maintenance.py.
 
-NOTE: DO *NOT* INCLUDE THE @ SYMBOL WHEN INCLUDING USER HANDLES.
-FURTHER, MAKE SURE YOU ARE USING THE USER HANDLE AND NOT THE GENERAL NAME OF
-THE ACCOUNT. THE USER HANDLE IS THE *UNIQUE* IDENTIFIER FOR YOUR ACCOUNT
-AND IS THE NAME THAT INCLUDES THE "@" SIGN PREVIOUSLY MENTIONED.
+Notes on KEY_WORDS --------
 
-For those unfamilier with python lists, each element is surrounded by single
-OR double quotes and then a comma like so: 
-KEY_WORDS = ["LOL", "Hello!", "Retween this", "Important"]
+NOTE 1: INCLUDE THE '@' SYMBOL WHEN INCLUDING USER HANDLES. User handles are
+the unique 'user_name' of a twitter account and are easily found immediately
+below a user's 'name' when viewing their bio/timeline. If still unclear,
+please look at README for an example image.
+
+NOTE 2: The script is case insensitive so whether you enter key words/phrases
+as properly capitalized or not does not matter.
+
+NOTE 3: Including the word 'RT' will prevent all retweets, excluding quoted,
+from being deleted.
+
+-------------
 
 If you would like all tweets irrespective of likes and mentions/word contents
 deleted, leave the values below unmodified.

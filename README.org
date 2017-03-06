@@ -80,18 +80,34 @@ of this repository. *Do not make another folder for it, it must be extracted as 
 *** Keywords and Likes Limit
 
 A part of these scripts that others neglect is the ability to preserve tweets based on some kind of criteria. With this script, I define three simple
-variables in ~options.py~ within the ~tweets~ subdirectory that help you have some control over this process. First, I let you create an list ~KEY_WORDS~ of keywords/user names that, 
-if found in a tweet, will prevent the script from deleting it. Secondly, I have a simple constant ~LIKES~ that lets you preserve popular tweets of yours
-if you want that. Finally, ~MAX~ allows you to determine how far back the script goes (~delete-maintenance.py~ only). The names of these variables cannot change unless you change their identifiers from within the script. Your variables should look like so:
+variables in ~options.py~ within the ~tweets~ subdirectory that help you have some control over this process. 
+
+- First, I let you create an list ~KEY_WORDS~ of keywords/user names that, if found in a tweet, will prevent the script from deleting it.
+- Secondly, I have a simple constant ~LIKES~ that lets you preserve popular tweets of yours with likes *greater than or equal* to the int value of ~LIKES~ defined. want that.
+- Finally, ~MAX~ allows you to determine how far back the script goes (~delete-maintenance.py~ only). 
+
+*BY DEFAULT, ALL TWEETS WILL BE DELETED. YOU MUST EDIT ~options.py~ TO PREVENT THIS*
+
+As an example: to preserve all tweets mentioning 'foobar', '@user_handle_here', '@jack','blah', any tweet with 5 or more likes, and only searching 300 tweets back (~delete-maintenance.py~ only), 
+your variables should look like so:
 
 #+BEGIN_SRC python
-KEY_WORDS = ["WORD", "USER_HANDLE_HERE", "BLAH"]
-LIKES = 5
-MAX = 300
+KEY_WORDS = ["FOOBAR", "@USER_HANDLE_HERE", "@jack", "blah"] #NOTE: when including user handles, please keep the '@' in the entry. 
+LIKES = 5 # INTEGER VALUE
+MAX = 300 #INTEGER VALUE
 #+END_SRC
 
-If you don't care for any keywords, simply leave the list empty. If you don't want to save any tweets with x number of likes, leave the variable with its default value of
-None. Same goes for MAX.
+**** Important notes regarding KEY_WORDS
+     
+     1. *Critical* As commented in the sample ~options.py~, if you include user handles, the [[https://dev.twitter.com/overview/api/users][unique ~screen_name~]] for each user denoted by '@' symbol, you must *include* the '@' symbol in the entry. Do not mistake ~screen name~ with a user's ~name~. To be extra clear, look at the image below. Notice how the ~name~, ~GZA~, is different from the ~screen_name~, ~@TheRealGZA~:
+     2. The script is case insensitive as of now because of how ~screen_names~ are treated as case insensitive. If this is a problem, make a PR.
+     3. If you include ~'RT'~ as a value in ~KEY_WORDS~, all retweets by the account being cleaned will *not* be deleted. This does not included 'quoted' tweets.
+
+     [[file:user-name-example.png][user name example]]
+
+**** Deleting everything with ~delete-the-tweets.py and ~delete-maintenance.py~
+    
+     As stated earlier, simply leave ~options.py~ alone with its default values and all tweets found by either script will be deleted.
 
 *** You are now ready to go.
 
