@@ -78,7 +78,7 @@ def check_keywords(csv_status, important):
     tweet_tokens = token.tokenize(csv_status)
     for words in tweet_tokens:
         for key in KEY_WORDS:
-            if words[1:].lower() == key.lower():
+            if words.lower() == key.lower():
                 important = True
     return important
 

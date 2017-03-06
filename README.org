@@ -103,7 +103,7 @@ MAX = 300 #INTEGER VALUE
      2. The script is case insensitive as of now because of how ~screen_names~ are treated as case insensitive. If this is a problem, make a PR.
      3. If you include ~'RT'~ as a value in ~KEY_WORDS~, all retweets by the account being cleaned will *not* be deleted. This does not included 'quoted' tweets.
 
-     [[user-name-example.png][user name example]]
+     [[./user-name-example.png]]
 
 **** Deleting everything with ~delete-the-tweets.py and ~delete-maintenance.py~
     
