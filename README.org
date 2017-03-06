@@ -99,11 +99,11 @@ MAX = 300 #INTEGER VALUE
 
 **** Important notes regarding KEY_WORDS
      
-     1. *Critical* As commented in the sample ~options.py~, if you include user handles, the [[https://dev.twitter.com/overview/api/users][unique ~screen_name~]] for each user denoted by '@' symbol, you must *include* the '@' symbol in the entry. Do not mistake ~screen name~ with a user's ~name~. To be extra clear, look at the image below. Notice how the ~name~, ~GZA~, is different from the ~screen_name~, ~@TheRealGZA~:
+     1. *Critical* As commented in the sample ~options.py~, if you include user handles, the [[https://dev.twitter.com/overview/api/users][unique ~screen_name~ ]] for each user denoted by '@' symbol, you must *include* the '@' symbol in the entry. Do not mistake ~screen name~ with a user's ~name~. To be extra clear, look at the image below. Notice how the ~name~, ~GZA~, is different from the ~screen_name~, ~@TheRealGZA~:
      2. The script is case insensitive as of now because of how ~screen_names~ are treated as case insensitive. If this is a problem, make a PR.
      3. If you include ~'RT'~ as a value in ~KEY_WORDS~, all retweets by the account being cleaned will *not* be deleted. This does not included 'quoted' tweets.
 
-     [[file:./user-name-example.png][user name example]]
+     [[user-name-example.png][user name example]
 
 **** Deleting everything with ~delete-the-tweets.py and ~delete-maintenance.py~
     
